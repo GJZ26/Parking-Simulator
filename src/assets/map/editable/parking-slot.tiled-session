@@ -1,0 +1,55 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "map/main.tmx",
+    "expandedProjectPaths": [
+        ".",
+        "map",
+        "tiles"
+    ],
+    "file.lastUsedOpenFilter": "Todos los archivos (*)",
+    "fileStates": {
+        "map/main.tmx": {
+            "scale": 1,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 187.5,
+                "y": 363.5
+            }
+        },
+        "tiles/grass.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        },
+        "tiles/road.tsx": {
+            "scaleInDock": 0.75,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "C:/Users/adolf/Documents/Proyectos Personales/Parking Simulator/src/assets/map",
+    "last.imagePath": "C:/Users/adolf/Documents/Proyectos Personales/Parking Simulator/src/assets/map/sprites",
+    "map.height": 13,
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 70,
+    "map.tileWidth": 70,
+    "map.width": 13,
+    "openFiles": [
+        "map/main.tmx",
+        "tiles/grass.tsx",
+        "tiles/road.tsx"
+    ],
+    "project": "parking-slot.tiled-project",
+    "recentFiles": [
+        "tiles/road.tsx",
+        "tiles/grass.tsx",
+        "map/main.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 70,
+        "width": 70
+    }
+}
