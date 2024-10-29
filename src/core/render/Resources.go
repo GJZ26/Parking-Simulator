@@ -17,6 +17,7 @@ type Resources struct {
 	Icon        *ebiten.Image
 	MapInfo     *tiled.Map
 	CarsSprites CarSprites
+	Points      PointMap
 }
 
 type CarSprites struct {
@@ -37,6 +38,21 @@ type CarSpritePath struct {
 	Yellow string
 }
 
+type PointData struct {
+	Id     uint32
+	X      float64
+	Y      float64
+	Width  float64
+	Height float64
+	Type   string
+}
+
+type PointMap struct {
+	Road        []PointData
+	ParkingSlot []PointData
+	ParkingRoad []PointData
+}
+
 func NewResources(iconPath string, mapPath string, carPaths CarSpritePath) *Resources {
 	fmt.Println("Importing resources")
 	resources := Resources{}
@@ -49,11 +65,14 @@ func NewResources(iconPath string, mapPath string, carPaths CarSpritePath) *Reso
 	resources.Icon = icon
 
 	mapInfo, err := tiled.LoadFile(mapPath)
+
 	if err != nil {
 		fmt.Println("Error loading map")
 		log.Fatal(err)
 	}
+
 	resources.MapInfo = mapInfo
+	resources.getPoints(mapInfo)
 
 	carPathsValue := reflect.ValueOf(carPaths)
 	carSpritesValue := reflect.ValueOf(&resources.CarsSprites).Elem()
@@ -73,4 +92,36 @@ func NewResources(iconPath string, mapPath string, carPaths CarSpritePath) *Reso
 	}
 
 	return &resources
+}
+
+func (r *Resources) getPoints(tiledMap *tiled.Map) {
+	fmt.Println("Reading object points from Map")
+
+	addPoint := func(points *[]PointData, object *tiled.Object) {
+		*points = append(*points, PointData{
+			Id:     object.ID,
+			X:      object.X,
+			Y:      object.Y,
+			Width:  object.Width,
+			Height: object.Height,
+			Type:   object.Type,
+		})
+	}
+
+	for _, layer := range tiledMap.ObjectGroups {
+		switch layer.Name {
+		case "slot":
+			for _, object := range layer.Objects {
+				addPoint(&r.Points.ParkingSlot, object)
+			}
+		case "path":
+			for _, object := range layer.Objects {
+				if object.Type == "default" {
+					addPoint(&r.Points.Road, object)
+				} else {
+					addPoint(&r.Points.ParkingRoad, object)
+				}
+			}
+		}
+	}
 }
