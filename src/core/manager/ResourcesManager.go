@@ -1,6 +1,7 @@
-package render
+package manager
 
 import (
+	"Parking_Simulator/src/core/manager/types"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -9,51 +10,14 @@ import (
 	"reflect"
 )
 
-type ResourcesRequest struct {
-	iconPath string
-}
-
 type Resources struct {
 	Icon        *ebiten.Image
 	MapInfo     *tiled.Map
-	CarsSprites CarSprites
-	Points      PointMap
+	CarsSprites types.CarSprites
+	Points      types.PointMap
 }
 
-type CarSprites struct {
-	Blue   *ebiten.Image
-	Green  *ebiten.Image
-	Orange *ebiten.Image
-	Pink   *ebiten.Image
-	Red    *ebiten.Image
-	Yellow *ebiten.Image
-}
-
-type CarSpritePath struct {
-	Blue   string
-	Green  string
-	Orange string
-	Pink   string
-	Red    string
-	Yellow string
-}
-
-type PointData struct {
-	Id     uint32
-	X      float64
-	Y      float64
-	Width  float64
-	Height float64
-	Type   string
-}
-
-type PointMap struct {
-	Road        []PointData
-	ParkingSlot []PointData
-	ParkingRoad []PointData
-}
-
-func NewResources(iconPath string, mapPath string, carPaths CarSpritePath) *Resources {
+func NewResources(iconPath string, mapPath string, carPaths types.CarSpritePath) *Resources {
 	fmt.Println("Importing resources")
 	resources := Resources{}
 
@@ -97,30 +61,32 @@ func NewResources(iconPath string, mapPath string, carPaths CarSpritePath) *Reso
 func (r *Resources) getPoints(tiledMap *tiled.Map) {
 	fmt.Println("Reading object points from Map")
 
-	addPoint := func(points *[]PointData, object *tiled.Object) {
-		*points = append(*points, PointData{
-			Id:     object.ID,
-			X:      object.X,
-			Y:      object.Y,
-			Width:  object.Width,
-			Height: object.Height,
-			Type:   object.Type,
-		})
+	addPoint := func(points *[]types.PointData, object *tiled.Object) {
+		if points != nil {
+			*points = append(*points, types.PointData{
+				Id:     object.ID,
+				X:      object.X,
+				Y:      object.Y,
+				Width:  object.Width,
+				Height: object.Height,
+				Type:   object.Type,
+			})
+		} else {
+			fmt.Println("Warning: Points array is nil")
+		}
 	}
 
 	for _, layer := range tiledMap.ObjectGroups {
-		switch layer.Name {
-		case "slot":
-			for _, object := range layer.Objects {
+		for _, object := range layer.Objects {
+			switch layer.Name {
+			case "default-path":
+				addPoint(&r.Points.Road, object)
+			case "parking-path":
+				addPoint(&r.Points.ParkingRoad, object)
+			case "slot-right", "slot-left":
 				addPoint(&r.Points.ParkingSlot, object)
-			}
-		case "path":
-			for _, object := range layer.Objects {
-				if object.Type == "default" {
-					addPoint(&r.Points.Road, object)
-				} else {
-					addPoint(&r.Points.ParkingRoad, object)
-				}
+			default:
+				fmt.Println("Warning: Unknown object")
 			}
 		}
 	}
