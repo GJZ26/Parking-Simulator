@@ -1,195 +1,193 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="70" tileheight="70" infinite="0" nextlayerid="5" nextobjectid="54">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="70" tileheight="70" infinite="0" nextlayerid="9" nextobjectid="107">
  <tileset firstgid="1" source="../tiles/grass.tsx"/>
  <tileset firstgid="7" source="../tiles/road.tsx"/>
  <layer id="1" name="background" width="13" height="13">
   <data encoding="csv">
 1,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,2684354563,1,
-3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
-3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
-3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
+3,1,2,1,1,1,1,1,1,1,1,1,3221225475,
+3,2,2,1,2,2684354566,2684354564,2,1,1,1,1,3221225475,
+3,2,2,1,1,1,2,1,1,2,1,1,3221225475,
 3,1,1,1,3221225477,1,1,1,3221225477,1,1,1,3221225475,
-3,1,1,1,5,1,1,1,5,1,1,1,3221225475,
-3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
-3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
+3,2,1,1,5,1,1,1,5,1,1,2,3221225475,
+3,1,1,2,1,1,1,1,1,1,2,2,3221225475,
+3,1,1,2,1,1,2,1,2,1,2,1,3221225475,
 3,1,1,1,1,1,1,1,1,1,1,1,3221225475,
 1,1610612739,1610612739,1610612739,1610612739,1610612739,1,1610612739,1610612739,1610612739,1610612739,1610612739,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1,
-1,1,1,1,1,1,1,1,1,1,1,1,1
+2,1,2,2,2,2,2,2,2,2,1,1,2,
+1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,1610612739,
+2,2,1,2,2,2,1,2,1,2,2,1,2
 </data>
  </layer>
  <layer id="2" name="path" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,14,1073741837,1073741837,1073741837,1073741837,14,1073741837,1073741837,1073741837,1073741837,14,0,
-0,2684354573,2147483656,2684354569,2684354572,2684354569,16,2684354569,1610612748,2684354569,8,1610612749,0,
-0,2684354573,9,1610612749,13,17,9,18,13,2684354573,9,1610612749,0,
+0,14,1073741837,1073741837,1073741837,1073741837,3221225486,1073741837,1073741837,1073741837,1073741837,1610612750,0,
+0,2684354573,2147483656,2684354569,2684354572,2684354570,16,1610612746,1610612748,2684354569,8,1610612749,0,
+0,2684354573,9,1610612749,13,17,10,18,13,2684354573,9,1610612749,0,
 0,2684354573,9,1610612749,0,17,9,18,0,2684354573,9,1610612749,0,
 0,2684354573,12,1610612749,0,17,3221225484,18,0,2684354573,12,1610612749,0,
-0,2684354573,9,1610612749,3221225485,17,9,18,3221225485,2684354573,9,1610612749,0,
-0,2684354573,1610612738,2684354569,1610612748,2684354569,15,2684354569,2684354572,2684354569,2684354568,1610612749,0,
-0,14,13,13,13,13,9,13,13,13,13,14,0,
+0,2684354573,9,1610612749,3221225485,17,3221225482,18,3221225485,2684354573,9,1610612749,0,
+0,2684354573,1610612743,2684354569,1610612748,2684354570,15,1610612746,2684354572,2684354569,2684354568,1610612749,0,
+0,2684354574,13,13,13,13,10,13,13,13,13,3221225486,0,
 0,0,0,0,0,0,9,0,0,0,0,0,0,
-1610612743,1610612743,1610612743,1610612746,1610612743,1610612743,1610612747,1610612743,1610612743,1610612746,1610612743,1610612743,8,
-2684354567,2684354567,2684354567,2684354570,2684354567,2684354567,2684354567,2684354567,2684354567,2684354570,2684354567,2684354567,2684354568,
+1610612748,1610612745,1610612745,1610612745,1610612748,2684354570,1610612747,1610612746,1610612748,1610612745,1610612745,1610612745,1610612748,
+0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="3" name="path">
-  <object id="1" type="default" x="6" y="806">
+ <objectgroup id="5" name="default-path">
+  <object id="54" type="entrance" x="909.609" y="734.478">
    <point/>
   </object>
-  <object id="2" type="default" x="875.667" y="804.667">
+  <object id="55" type="cross" x="455.957" y="734.435">
    <point/>
   </object>
-  <object id="3" type="default" x="874" y="734.667">
-   <point/>
-  </object>
-  <object id="4" type="entrance" x="455.5" y="734">
-   <point/>
-  </object>
-  <object id="5" type="cross" x="455.5" y="524.75">
-   <point/>
-  </object>
-  <object id="6" type="left" x="174.667" y="524.333">
-   <point/>
-  </object>
-  <object id="7" type="left" x="175.455" y="174.909">
-   <point/>
-  </object>
-  <object id="8" type="exit" x="455.636" y="171.091">
-   <point/>
-  </object>
-  <object id="9" type="default" x="2.5" y="734.625">
-   <point/>
-  </object>
-  <object id="10" type="right" x="735.455" y="524">
-   <point/>
-  </object>
-  <object id="11" type="right" x="734.545" y="174.727">
+  <object id="56" type="exit" x="-0.181818" y="734.545">
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="4" name="slot">
-  <object id="12" type="left" x="107.5" y="527.25">
+ <objectgroup id="6" name="parking-path">
+  <object id="57" type="cross" x="455.455" y="524.182">
    <point/>
   </object>
-  <object id="13" type="left" x="107.25" y="456.25">
+  <object id="58" type="bottomleft" x="175.125" y="524.625">
    <point/>
   </object>
-  <object id="14" type="left" x="106" y="387.25">
+  <object id="59" type="upperleft" x="175.5" y="173.625">
    <point/>
   </object>
-  <object id="15" type="left" x="105.75" y="317">
+  <object id="60" type="bottomright" x="736.063" y="523.813">
    <point/>
   </object>
-  <object id="16" type="left" x="104.5" y="245.75">
+  <object id="61" type="upperright" x="734.87" y="174.348">
    <point/>
   </object>
-  <object id="17" type="left" x="104.75" y="174.5">
+  <object id="62" type="exit" x="455.25" y="165.25">
    <point/>
   </object>
-  <object id="18" type="top" x="177" y="104.333">
+ </objectgroup>
+ <objectgroup id="7" name="slot-right">
+  <object id="87" type="up" x="525.614" y="595.322">
    <point/>
   </object>
-  <object id="19" type="top" x="248.333" y="104.333">
+  <object id="88" type="up" x="596.947" y="596.322">
    <point/>
   </object>
-  <object id="20" type="top" x="317" y="103">
+  <object id="89" type="up" x="664.947" y="597.322">
    <point/>
   </object>
-  <object id="21" type="top" x="387.667" y="103">
+  <object id="90" type="up" x="736.614" y="595.989">
    <point/>
   </object>
-  <object id="23" type="top" x="528.667" y="106">
+  <object id="91" type="left" x="809.704" y="524.019">
    <point/>
   </object>
-  <object id="24" type="top" x="598.75" y="105.5">
+  <object id="92" type="left" x="808.947" y="454.905">
    <point/>
   </object>
-  <object id="25" type="top" x="668.75" y="105.75">
+  <object id="93" type="left" x="808.613" y="384.405">
    <point/>
   </object>
-  <object id="26" type="top" x="738.75" y="103.75">
+  <object id="94" type="left" x="808.363" y="315.155">
    <point/>
   </object>
-  <object id="27" type="right" x="812.333" y="179.667">
+  <object id="95" type="left" x="809.613" y="245.155">
    <point/>
   </object>
-  <object id="28" type="right" x="812.667" y="248.667">
+  <object id="96" type="left" x="808.613" y="175.405">
    <point/>
   </object>
-  <object id="29" type="right" x="811.25" y="317.25">
+  <object id="97" type="down" x="738.28" y="106.322">
    <point/>
   </object>
-  <object id="30" type="right" x="809" y="388.5">
+  <object id="98" type="down" x="666.28" y="106.988">
    <point/>
   </object>
-  <object id="31" type="right" x="809" y="457">
+  <object id="99" type="down" x="597.614" y="106.988">
    <point/>
   </object>
-  <object id="32" type="right" x="809" y="528">
+  <object id="100" type="down" x="528.614" y="106.655">
    <point/>
   </object>
-  <object id="33" type="bottom" x="737.5" y="601.75">
+  <object id="101" type="right" x="666.977" y="248.746">
    <point/>
   </object>
-  <object id="34" type="bottom" x="667.273" y="599.273">
+  <object id="102" type="right" x="666.613" y="320.564">
    <point/>
   </object>
-  <object id="35" type="bottom" x="598.25" y="598.5">
+  <object id="103" type="right" x="667.522" y="389.291">
    <point/>
   </object>
-  <object id="36" type="bottom" x="528.25" y="596.75">
+  <object id="104" type="right" x="666.795" y="457.837">
    <point/>
   </object>
-  <object id="37" type="bottom" x="390" y="596.667">
+  <object id="105" type="down" x="594.158" y="457.413">
    <point/>
   </object>
-  <object id="38" type="bottom" x="318.667" y="596.333">
+  <object id="106" type="up" x="596.863" y="248.364">
    <point/>
   </object>
-  <object id="39" type="bottom" x="250.333" y="598">
+ </objectgroup>
+ <objectgroup id="8" name="slot-left">
+  <object id="63" type="up" x="389.333" y="594.333">
    <point/>
   </object>
-  <object id="40" type="bottom" x="178.667" y="597.667">
+  <object id="64" type="up" x="318" y="595.333">
    <point/>
   </object>
-  <object id="41" type="right" x="245" y="243">
+  <object id="65" type="up" x="250" y="596.333">
    <point/>
   </object>
-  <object id="42" type="right" x="245" y="314">
+  <object id="66" type="up" x="178.333" y="595">
    <point/>
   </object>
-  <object id="43" type="right" x="244.333" y="383.667">
+  <object id="67" type="right" x="104.909" y="526.364">
    <point/>
   </object>
-  <object id="44" type="right" x="245" y="452.333">
+  <object id="70" type="right" x="109" y="457.25">
    <point/>
   </object>
-  <object id="45" type="top" x="313.333" y="454.667">
+  <object id="71" type="right" x="106" y="386.75">
    <point/>
   </object>
-  <object id="46" type="bottom" x="317.75" y="246.25">
+  <object id="72" type="right" x="106.25" y="317.5">
    <point/>
   </object>
-  <object id="47" type="bottom" x="596" y="245">
+  <object id="73" type="right" x="105" y="247.5">
    <point/>
   </object>
-  <object id="48" type="left" x="664.5" y="249.5">
+  <object id="74" type="right" x="106" y="177.75">
    <point/>
   </object>
-  <object id="49" type="left" x="668" y="316">
+  <object id="75" type="down" x="177.667" y="102.667">
    <point/>
   </object>
-  <object id="50" type="left" x="665" y="388">
+  <object id="76" type="down" x="249.667" y="103.333">
    <point/>
   </object>
-  <object id="51" type="left" x="664.5" y="456.5">
+  <object id="77" type="down" x="318.333" y="103.333">
    <point/>
   </object>
-  <object id="52" type="top" x="592" y="450.5">
+  <object id="78" type="down" x="387.333" y="103">
+   <point/>
+  </object>
+  <object id="79" type="left" x="247.636" y="243.091">
+   <point/>
+  </object>
+  <object id="80" type="left" x="248" y="314.909">
+   <point/>
+  </object>
+  <object id="81" type="left" x="247.091" y="383.636">
+   <point/>
+  </object>
+  <object id="82" type="left" x="247.818" y="452.182">
+   <point/>
+  </object>
+  <object id="84" type="down" x="315.455" y="453.091">
+   <point/>
+  </object>
+  <object id="85" type="up" x="321.75" y="243.375">
    <point/>
   </object>
  </objectgroup>
