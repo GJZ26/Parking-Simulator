@@ -9,24 +9,18 @@ import (
 )
 
 type EntityManager struct {
-	cars              []*entity.Car
-	carSprites        *types.CarSprites
-	parkingPathPoints []types.PointData
-	parkingSlotPoints []types.PointData
-	defaultPathPoints []types.PointData
+	cars       []*entity.Car
+	carSprites *types.CarSprites
+	points     types.PointMap
 }
 
 func NewEntityManager(
-	parkingPathPoints []types.PointData,
-	parkingSlotPoints []types.PointData,
-	defaultPathPoints []types.PointData,
+	points types.PointMap,
 	sprites types.CarSprites) *EntityManager {
 	return &EntityManager{
-		cars:              make([]*entity.Car, 0),
-		parkingPathPoints: parkingPathPoints,
-		parkingSlotPoints: parkingSlotPoints,
-		defaultPathPoints: defaultPathPoints,
-		carSprites:        &sprites,
+		cars:       make([]*entity.Car, 0),
+		points:     points,
+		carSprites: &sprites,
 	}
 }
 

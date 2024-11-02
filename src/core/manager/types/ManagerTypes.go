@@ -34,7 +34,8 @@ type PointData struct {
 }
 
 type PointMap struct {
-	Road        []PointData
-	ParkingSlot []PointData
-	ParkingRoad []PointData
+	Road             []PointData
+	LeftParkingSlot  []PointData
+	RightParkingSlot []PointData
+	ParkingRoad      []PointData
 }

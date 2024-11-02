@@ -32,7 +32,7 @@ func main() {
 	})
 
 	// Starting Entity Manager
-	var entityManager = routines.NewEntityManager(resources.Points.ParkingRoad, resources.Points.ParkingSlot, resources.Points.Road, resources.CarsSprites)
+	var entityManager = routines.NewEntityManager(resources.Points, resources.CarsSprites)
 
 	// Channels
 	renderChannel := make(chan []*entity.Car)

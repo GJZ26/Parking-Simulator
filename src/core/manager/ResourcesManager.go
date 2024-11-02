@@ -83,8 +83,10 @@ func (r *Resources) getPoints(tiledMap *tiled.Map) {
 				addPoint(&r.Points.Road, object)
 			case "parking-path":
 				addPoint(&r.Points.ParkingRoad, object)
-			case "slot-right", "slot-left":
-				addPoint(&r.Points.ParkingSlot, object)
+			case "slot-right":
+				addPoint(&r.Points.RightParkingSlot, object)
+			case "slot-left":
+				addPoint(&r.Points.LeftParkingSlot, object)
 			default:
 				fmt.Println("Warning: Unknown object")
 			}
