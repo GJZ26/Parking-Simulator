@@ -60,7 +60,10 @@ func (e *EntityManager) invokeCar(slot geo.SlotInfo, queue *[]*entity.Car) {
 		}
 	}
 	println("[Entity Manager]: Invoking new Car")
-	*queue = append(*queue, entity.NewCar(slot, e.points.Road, e.points.ParkingRoad, getRandomSprite(), len(*queue)))
+	// TODO: remove later
+	car := entity.NewCar(slot, e.points.Road, e.points.ParkingRoad, getRandomSprite(), len(*queue))
+	car.Park()
+	*queue = append(*queue, car)
 	e.carCounter++
 }
 
