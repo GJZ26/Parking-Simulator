@@ -2,7 +2,7 @@ package render
 
 import (
 	"Parking_Simulator/src/core/entity"
-	"Parking_Simulator/src/core/manager/types"
+	"Parking_Simulator/src/core/manager/types/resources"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -22,7 +22,7 @@ const (
 
 type Engine struct {
 	background *ebiten.Image
-	cache      types.RenderData
+	cache      resources.RenderData
 }
 
 func NewRenderEngine(title string, icon *ebiten.Image, tileMap *tiled.Map) *Engine {
@@ -51,7 +51,7 @@ func (r *Engine) Draw(screen *ebiten.Image) {
 	r.DrawCars(screen, r.cache)
 }
 
-func (r *Engine) DrawCars(screen *ebiten.Image, cars types.RenderData) {
+func (r *Engine) DrawCars(screen *ebiten.Image, cars resources.RenderData) {
 	for _, car := range cars.Cars {
 		r.DrawCar(screen, car)
 	}
@@ -94,14 +94,14 @@ func (r *Engine) Run() {
 	}
 }
 
-func (r *Engine) UpdateCache(renderChannel chan types.RenderData) {
+func (r *Engine) UpdateCache(renderChannel chan resources.RenderData) {
 	for {
 		select {
 		case current := <-renderChannel:
 			println("[Render Engine]: Rendering from Channel")
 			r.cache = current
 		default:
-			continue
 		}
+		//println("[Render Engine]: Rendering from caché")
 	}
 }

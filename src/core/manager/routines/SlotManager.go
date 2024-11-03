@@ -1,18 +1,18 @@
 package routines
 
 import (
-	"Parking_Simulator/src/core/manager/types"
+	"Parking_Simulator/src/core/manager/types/geo"
 	"time"
 )
 
 type SlotManager struct {
-	slots map[uint32]types.SlotInfo
+	slots map[uint32]geo.SlotInfo
 }
 
-func NewSlotManager(pointMap types.PointMap) *SlotManager {
-	slots := map[uint32]types.SlotInfo{}
+func NewSlotManager(pointMap geo.PointMap) *SlotManager {
+	slots := map[uint32]geo.SlotInfo{}
 	for _, slot := range pointMap.LeftParkingSlot {
-		slots[slot.Id] = types.SlotInfo{
+		slots[slot.Id] = geo.SlotInfo{
 			Id:       slot.Id,
 			X:        slot.X,
 			Y:        slot.Y,
@@ -20,12 +20,12 @@ func NewSlotManager(pointMap types.PointMap) *SlotManager {
 			Height:   slot.Height,
 			Type:     slot.Type,
 			Occupied: false,
-			Side:     types.LeftSide,
+			Side:     geo.LeftSide,
 		}
 	}
 
 	for _, slot := range pointMap.RightParkingSlot {
-		slots[slot.Id] = types.SlotInfo{
+		slots[slot.Id] = geo.SlotInfo{
 			Id:       slot.Id,
 			X:        slot.X,
 			Y:        slot.Y,
@@ -33,19 +33,18 @@ func NewSlotManager(pointMap types.PointMap) *SlotManager {
 			Height:   slot.Height,
 			Type:     slot.Type,
 			Occupied: false,
-			Side:     types.RightSide,
+			Side:     geo.RightSide,
 		}
 	}
 	return &SlotManager{slots}
 }
 
-func (s *SlotManager) Run(slotInfo chan types.SlotInfo, freeSlotChannel chan []uint32) {
+func (s *SlotManager) Run(slotInfo chan geo.SlotInfo, freeSlotChannel chan []uint32) {
 	for {
 		select {
 		case freeSlot := <-freeSlotChannel:
 			s.freeSlots(freeSlot)
 		default:
-
 		}
 		data := s.sendCurrentCarData()
 
@@ -53,7 +52,7 @@ func (s *SlotManager) Run(slotInfo chan types.SlotInfo, freeSlotChannel chan []u
 			slotInfo <- data
 		}
 
-		time.Sleep(50 * time.Millisecond)
+		time.Sleep(1 * time.Second)
 	}
 }
 
@@ -67,7 +66,7 @@ func (s *SlotManager) freeSlots(slots []uint32) {
 	}
 }
 
-func (s *SlotManager) sendCurrentCarData() types.SlotInfo {
+func (s *SlotManager) sendCurrentCarData() geo.SlotInfo {
 	for id, slot := range s.slots {
 		if !slot.Occupied {
 			slot.Occupied = true
@@ -76,7 +75,7 @@ func (s *SlotManager) sendCurrentCarData() types.SlotInfo {
 			return slot
 		}
 	}
-	return types.SlotInfo{
+	return geo.SlotInfo{
 		X: -1,
 	}
 }

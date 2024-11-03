@@ -2,33 +2,39 @@ package routines
 
 import (
 	"Parking_Simulator/src/core/entity"
-	"Parking_Simulator/src/core/manager/types"
+	"Parking_Simulator/src/core/manager/types/geo"
+	"Parking_Simulator/src/core/manager/types/resources"
 	"github.com/hajimehoshi/ebiten/v2"
 	"math/rand"
 	"time"
 )
 
 type EntityManager struct {
-	carCounter int
-	maxCars    int
-	cars       []*entity.Car
-	carSprites *types.CarSprites
-	points     types.PointMap
+	carCounter          int
+	maxCars             int
+	carsInEntranceQueue int
+	carsInExitQueue     int
+	cars                []*entity.Car
+	carSprites          *resources.CarSprites
+	points              geo.PointMap
+	slotsAvailable      []geo.SlotInfo
 }
 
 func NewEntityManager(
-	points types.PointMap,
-	sprites types.CarSprites) *EntityManager {
+	points geo.PointMap,
+	sprites resources.CarSprites) *EntityManager {
 	return &EntityManager{
-		carCounter: 0,
-		maxCars:    100,
-		cars:       make([]*entity.Car, 0),
-		points:     points,
-		carSprites: &sprites,
+		carsInEntranceQueue: 0,
+		carsInExitQueue:     0,
+		carCounter:          0,
+		maxCars:             100,
+		cars:                make([]*entity.Car, 0),
+		points:              points,
+		carSprites:          &sprites,
 	}
 }
 
-func (e *EntityManager) invokeCar(slotId uint32, x int, y int) {
+func (e *EntityManager) invokeCar(slot geo.SlotInfo, x int, y int) {
 	if e.carCounter >= e.maxCars {
 		return
 	}
@@ -51,20 +57,19 @@ func (e *EntityManager) invokeCar(slotId uint32, x int, y int) {
 		}
 	}
 	println("[Entity Manager]: Invoking new Car")
-	e.cars = append(e.cars, entity.NewCar(x, y, slotId, getRandomSprite()))
+	e.cars = append(e.cars, entity.NewCar(slot, e.points.Road, e.points.ParkingRoad, getRandomSprite()))
 	e.carCounter++
 }
 
-func (e *EntityManager) Run(renderChannel chan types.RenderData, slotChannel chan types.SlotInfo, freeSlotChannel chan []uint32) {
+func (e *EntityManager) Run(renderChannel chan resources.RenderData, slotChannel chan geo.SlotInfo, freeSlotChannel chan []uint32) {
 	for {
 		select {
 		case slot := <-slotChannel:
-			println("[Entity Manager]: Received free slot")
-			e.invokeCar(slot.Id, int(slot.X), int(slot.Y))
+			e.newSlotAvailable(slot)
 		default:
 		}
-		println("[Entity Manager]: Send Render Data")
-		renderChannel <- types.RenderData{
+
+		renderChannel <- resources.RenderData{
 			Counter: e.maxCars - e.carCounter,
 			Cars:    e.Update(freeSlotChannel),
 		}
@@ -75,6 +80,7 @@ func (e *EntityManager) Run(renderChannel chan types.RenderData, slotChannel cha
 func (e *EntityManager) Update(freeSlotChannel chan []uint32) []*entity.Car {
 	activeCars := make([]*entity.Car, 0, len(e.cars))
 	var res = make([]uint32, 0)
+
 	for _, car := range e.cars {
 		if car.Update() {
 			activeCars = append(activeCars, car)
@@ -83,6 +89,25 @@ func (e *EntityManager) Update(freeSlotChannel chan []uint32) []*entity.Car {
 		}
 	}
 	e.cars = activeCars
-	freeSlotChannel <- res
+
+	select {
+	case freeSlotChannel <- res:
+	default:
+		println("[EntityManager]: Canal de freeSlotChannel no disponible, datos no enviados")
+	}
+
 	return e.cars
+}
+
+func (e *EntityManager) newSlotAvailable(info geo.SlotInfo) {
+	if e.carCounter < 3 {
+		if len(e.slotsAvailable) > 0 {
+			info = e.slotsAvailable[len(e.slotsAvailable)-1]
+			e.slotsAvailable = e.slotsAvailable[:len(e.slotsAvailable)-1]
+		}
+		e.invokeCar(info, int(info.X), int(info.Y))
+		e.carCounter++
+	} else {
+		e.slotsAvailable = append(e.slotsAvailable, info)
+	}
 }

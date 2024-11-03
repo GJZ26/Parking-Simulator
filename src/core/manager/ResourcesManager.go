@@ -1,7 +1,8 @@
 package manager
 
 import (
-	"Parking_Simulator/src/core/manager/types"
+	"Parking_Simulator/src/core/manager/types/geo"
+	Resources2 "Parking_Simulator/src/core/manager/types/resources"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -13,11 +14,11 @@ import (
 type Resources struct {
 	Icon        *ebiten.Image
 	MapInfo     *tiled.Map
-	CarsSprites types.CarSprites
-	Points      types.PointMap
+	CarsSprites Resources2.CarSprites
+	Points      geo.PointMap
 }
 
-func NewResources(iconPath string, mapPath string, carPaths types.CarSpritePath) *Resources {
+func NewResources(iconPath string, mapPath string, carPaths Resources2.CarSpritePath) *Resources {
 	fmt.Println("Importing resources")
 	resources := Resources{}
 
@@ -61,9 +62,9 @@ func NewResources(iconPath string, mapPath string, carPaths types.CarSpritePath)
 func (r *Resources) getPoints(tiledMap *tiled.Map) {
 	fmt.Println("Reading object points from Map")
 
-	addPoint := func(points *[]types.PointData, object *tiled.Object) {
+	addPoint := func(points *[]geo.PointData, object *tiled.Object) {
 		if points != nil {
-			*points = append(*points, types.PointData{
+			*points = append(*points, geo.PointData{
 				Id:     object.ID,
 				X:      object.X,
 				Y:      object.Y,

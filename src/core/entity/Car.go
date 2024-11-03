@@ -1,33 +1,46 @@
 package entity
 
 import (
+	"Parking_Simulator/src/core/manager/types/geo"
 	"github.com/hajimehoshi/ebiten/v2"
 	"math/rand"
 	"time"
 )
 
+const carSpeed = 3
+
 type Car struct {
-	targetX     int
-	targetY     int
-	sprite      *ebiten.Image
-	x           int
-	y           int
-	angle       float64
-	parkingTime int
-	startTime   time.Time
-	slotId      uint32
+	targetSlot    geo.SlotInfo
+	sprite        *ebiten.Image
+	x             int
+	y             int
+	angle         float64
+	parkingTime   int
+	startTime     time.Time
+	defaultRoad   []geo.PointData
+	parkingRoad   []geo.PointData
+	queuePosition int
 }
 
-func NewCar(x int, y int, slotId uint32, sprite *ebiten.Image) *Car {
-	return &Car{x: x, y: y, angle: 0, sprite: sprite, parkingTime: 3 + rand.Intn(3), slotId: slotId}
+func NewCar(target geo.SlotInfo, road []geo.PointData, parking []geo.PointData, sprite *ebiten.Image) *Car {
+	return &Car{
+		x:           int(road[0].X),
+		y:           int(road[0].Y),
+		angle:       -90,
+		sprite:      sprite,
+		parkingTime: 3 + rand.Intn(3),
+		targetSlot:  target,
+		parkingRoad: parking,
+		defaultRoad: road}
 }
 
 func (c *Car) Update() bool {
 
-	if c.startTime.IsZero() {
-		c.StartTimer()
+	if c.x > int(c.defaultRoad[1].X+70) {
+		c.x -= carSpeed
 	}
 
+	c.StartTimer()
 	return c.IsActive()
 }
 
@@ -60,5 +73,9 @@ func (c *Car) IsActive() bool {
 }
 
 func (c *Car) GetSlotID() uint32 {
-	return c.slotId
+	return c.targetSlot.Id
+}
+
+func (c *Car) SetQueuePosition(position int) {
+	c.queuePosition = position
 }
