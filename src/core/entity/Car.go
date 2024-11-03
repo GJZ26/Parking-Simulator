@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const carSpeed = 3
+const carSpeed = 5
 
 type Car struct {
 	targetSlot    geo.SlotInfo
@@ -86,6 +86,9 @@ func (c *Car) searchExitCross() {
 }
 
 func (c *Car) exit() {
+	if c.step <= 2 {
+		return
+	}
 	switch c.exitStep {
 	case 0:
 		c.goOutSide()
@@ -232,7 +235,7 @@ func (c *Car) formToQueue() {
 
 	if !isOnTarget {
 		c.y += carSpeed
-	} else {
+	} else if c.step == 3 {
 		c.internalStep++
 		c.exitStep = 0
 	}
@@ -244,8 +247,6 @@ func (c *Car) posInEntranceQueue() {
 
 	if isBeyondTarget {
 		c.x -= carSpeed
-	} else {
-		c.internalStep = 1
 	}
 }
 
@@ -417,12 +418,15 @@ func (c *Car) SetQueuePosition(position int) {
 
 func (c *Car) Park() {
 	c.step = 1
+	c.internalStep = 1
 }
 
 func (c *Car) ToExitQueue() {
 	c.step = 2
+	c.internalStep = 6
 }
 
 func (c *Car) Exit() {
 	c.step = 3
+	c.startTime = time.Time{}
 }

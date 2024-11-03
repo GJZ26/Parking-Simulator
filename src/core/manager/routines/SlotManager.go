@@ -55,11 +55,13 @@ func (s *SlotManager) Run(slotInfo chan geo.SlotInfo, freeSlotChannel chan []uin
 }
 
 func (s *SlotManager) freeSlots(slots []uint32) {
-	//println("[Slot Manager]: Free Slots")
 	for _, id := range slots {
 		if slot, exists := s.slots[id]; exists {
 			slot.Occupied = false
 			s.slots[id] = slot
+			println("[Slot Manager]: Free Slots: ", id)
+		} else {
+			println("[Slot Manager]: Could not found slot: ", id)
 		}
 	}
 }
