@@ -14,9 +14,10 @@ type EntityManager struct {
 	maxCars             int
 	carsInEntranceQueue int
 	carsInExitQueue     int
+	exitControl         bool
 	entranceQueue       []*entity.Car
 	exitQueue           []*entity.Car
-	iddleCars           []*entity.Car
+	idleCars            []*entity.Car
 	carSprites          *resources.CarSprites
 	points              geo.PointMap
 	slotsAvailable      []geo.SlotInfo
@@ -28,7 +29,7 @@ func NewEntityManager(
 	return &EntityManager{
 		carCounter:    0,
 		maxCars:       100,
-		iddleCars:     make([]*entity.Car, 0),
+		idleCars:      make([]*entity.Car, 0),
 		entranceQueue: make([]*entity.Car, 0),
 		exitQueue:     make([]*entity.Car, 0),
 		points:        points,
@@ -37,6 +38,7 @@ func NewEntityManager(
 }
 
 func (e *EntityManager) invokeCar(slot geo.SlotInfo, queue *[]*entity.Car) {
+	println("[Entity Manager]: Invoking car")
 	if e.carCounter >= e.maxCars {
 		return
 	}
@@ -60,18 +62,19 @@ func (e *EntityManager) invokeCar(slot geo.SlotInfo, queue *[]*entity.Car) {
 		}
 	}
 	println("[Entity Manager]: Invoking new Car")
-	// TODO: remove later
 	car := entity.NewCar(slot, e.points.Road, e.points.ParkingRoad, getRandomSprite(), len(*queue))
-	car.Park()
 	*queue = append(*queue, car)
 	e.carCounter++
 }
 
-func (e *EntityManager) Run(renderChannel chan resources.RenderData, slotChannel chan geo.SlotInfo, freeSlotChannel chan []uint32) {
+func (e *EntityManager) Run(renderChannel chan resources.RenderData, slotChannel chan geo.SlotInfo, freeSlotChannel chan []uint32, exitControl chan bool, entranceControl chan bool) {
 	for {
 		select {
 		case slot := <-slotChannel:
 			e.newSlotAvailable(slot)
+		case <-entranceControl:
+			e.entryOrExit()
+			exitControl <- true
 		default:
 		}
 
@@ -88,8 +91,21 @@ func (e *EntityManager) Update(freeSlotChannel chan []uint32) []*entity.Car {
 	activeCars := make([]*entity.Car, 0, len(e.entranceQueue))
 	var res = make([]uint32, 0)
 
+	for _, car := range e.idleCars {
+		stillParking, needDead := car.Update()
+		if !needDead {
+			activeCars = append(activeCars, car)
+		}
+		if !stillParking {
+			car.Exit()
+		}
+	}
+	e.idleCars = activeCars
+
+	activeCars = make([]*entity.Car, 0, len(e.entranceQueue))
 	for _, car := range e.entranceQueue {
-		if car.Update() {
+		needExit, _ := car.Update()
+		if needExit {
 			activeCars = append(activeCars, car)
 		} else {
 			res = append(res, car.GetSlotID())
@@ -103,7 +119,7 @@ func (e *EntityManager) Update(freeSlotChannel chan []uint32) []*entity.Car {
 		println("[EntityManager]: Canal de freeSlotChannel no disponible, datos no enviados")
 	}
 
-	return e.entranceQueue
+	return append(e.entranceQueue, append(e.idleCars, e.exitQueue...)...)
 }
 
 func (e *EntityManager) newSlotAvailable(info geo.SlotInfo) {
@@ -115,5 +131,37 @@ func (e *EntityManager) newSlotAvailable(info geo.SlotInfo) {
 		e.invokeCar(info, &e.entranceQueue)
 	} else {
 		e.slotsAvailable = append(e.slotsAvailable, info)
+	}
+}
+
+func (e *EntityManager) entryOrExit() {
+	if len(e.entranceQueue) > 0 && len(e.exitQueue) > 0 {
+		if rand.Intn(2) == 0 {
+			e.processEntrance()
+		} else {
+			//e.processExit()
+		}
+		return
+	}
+
+	if len(e.entranceQueue) > 0 {
+		e.processEntrance()
+		return
+	}
+
+	if len(e.exitQueue) > 0 {
+		// e.processExit()
+	}
+}
+
+func (e *EntityManager) processEntrance() {
+	car := e.entranceQueue[0]
+	car.Park()
+
+	e.entranceQueue = e.entranceQueue[1:]
+	e.idleCars = append(e.idleCars, car)
+
+	for i, c := range e.entranceQueue {
+		c.SetQueuePosition(i)
 	}
 }

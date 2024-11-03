@@ -2,7 +2,6 @@ package routines
 
 import (
 	"Parking_Simulator/src/core/manager/types/geo"
-	"time"
 )
 
 type SlotManager struct {
@@ -52,12 +51,11 @@ func (s *SlotManager) Run(slotInfo chan geo.SlotInfo, freeSlotChannel chan []uin
 			slotInfo <- data
 		}
 
-		time.Sleep(1 * time.Second) // dar un poquito de tiempo para que no se amontonen :D
 	}
 }
 
 func (s *SlotManager) freeSlots(slots []uint32) {
-	println("[Slot Manager]: Free Slots")
+	//println("[Slot Manager]: Free Slots")
 	for _, id := range slots {
 		if slot, exists := s.slots[id]; exists {
 			slot.Occupied = false

@@ -98,7 +98,7 @@ func (r *Engine) UpdateCache(renderChannel chan resources.RenderData) {
 	for {
 		select {
 		case current := <-renderChannel:
-			println("[Render Engine]: Rendering from Channel")
+			//println("[Render Engine]: Rendering from Channel")
 			r.cache = current
 		default:
 		}

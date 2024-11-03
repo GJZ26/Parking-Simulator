@@ -42,9 +42,12 @@ func main() {
 	slotChannel := make(chan geo.SlotInfo, 1)
 	renderChannel := make(chan resourcesType.RenderData, 1)
 	freeSlotChannel := make(chan []uint32, 1)
+	exitChannel := make(chan bool)
+	entranceChannel := make(chan bool)
 
 	// GoRoutines
-	go entityManager.Run(renderChannel, slotChannel, freeSlotChannel)
+	go routines.ExitManager(exitChannel, entranceChannel)
+	go entityManager.Run(renderChannel, slotChannel, freeSlotChannel, exitChannel, entranceChannel)
 	go slotManager.Run(slotChannel, freeSlotChannel)
 	go renderEngine.UpdateCache(renderChannel)
 
