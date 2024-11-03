@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-const carSpeed = 5
+const carSpeed = 3
 
 type Car struct {
 	targetSlot    geo.SlotInfo
@@ -24,6 +24,7 @@ type Car struct {
 	step          uint8
 	internalStep  uint8
 	exitStep      uint8
+	isInOtherSide bool
 }
 
 func NewCar(target geo.SlotInfo, road []geo.PointData, parking []geo.PointData, sprite *ebiten.Image, queuePosition int) *Car {
@@ -39,6 +40,7 @@ func NewCar(target geo.SlotInfo, road []geo.PointData, parking []geo.PointData, 
 		queuePosition: queuePosition,
 		step:          0,
 		internalStep:  0,
+		isInOtherSide: false,
 	}
 }
 
@@ -103,6 +105,7 @@ func (c *Car) goOutSide() {
 	if !isOnPosition {
 		c.y += carSpeed
 	} else {
+		c.isInOtherSide = true
 		c.angle = -90
 		c.exitStep++
 	}
@@ -280,6 +283,7 @@ func (c *Car) goToCross() {
 	if isUnderTarget {
 		c.y -= carSpeed
 	} else {
+		c.isInOtherSide = true
 		c.internalStep = 3
 	}
 }
@@ -419,6 +423,7 @@ func (c *Car) SetQueuePosition(position int) {
 func (c *Car) Park() {
 	c.step = 1
 	c.internalStep = 1
+	c.isInOtherSide = false
 }
 
 func (c *Car) ToExitQueue() {
@@ -429,4 +434,13 @@ func (c *Car) ToExitQueue() {
 func (c *Car) Exit() {
 	c.step = 3
 	c.startTime = time.Time{}
+	c.isInOtherSide = false
+}
+
+func (c *Car) IsInOtherSide() bool {
+	if !c.isInOtherSide {
+		return c.isInOtherSide
+	}
+	c.isInOtherSide = false
+	return true
 }

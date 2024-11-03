@@ -77,20 +77,19 @@ func (e *EntityManager) Run(renderChannel chan resources.RenderData, slotChannel
 			e.newSlotAvailable(slot)
 		case <-entranceControl:
 			e.entryOrExit()
-			exitControl <- true
 		default:
 		}
 
 		renderChannel <- resources.RenderData{
 			Counter: maxCar - e.carCounter,
-			Cars:    e.tick(freeSlotChannel),
+			Cars:    e.tick(freeSlotChannel, exitControl),
 		}
 
 		time.Sleep(10 * time.Millisecond)
 	}
 }
 
-func (e *EntityManager) tick(freeSlotChannel chan []uint32) []*entity.Car {
+func (e *EntityManager) tick(freeSlotChannel chan []uint32, exitControl chan bool) []*entity.Car {
 	var freeSlots = make([]uint32, 0)
 	// Update entrance cars
 	for _, car := range e.entranceQueue {
@@ -101,6 +100,13 @@ func (e *EntityManager) tick(freeSlotChannel chan []uint32) []*entity.Car {
 	for index := 0; index < len(e.idleCars); {
 		car := e.idleCars[index]
 		stillParking, needDead := car.Update()
+		if car.IsInOtherSide() {
+			select {
+			case exitControl <- true:
+			default:
+				println("- - - [Entity Manager]: ERROR, COLLISION!! - - -")
+			}
+		}
 		if !stillParking {
 			if len(e.exitQueue) < maxCarInQueue {
 				car.ToExitQueue()

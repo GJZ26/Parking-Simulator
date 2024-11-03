@@ -8,7 +8,6 @@ func ExitManager(exitControl chan bool, entranceControl chan bool) {
 	for {
 		select {
 		case <-exitControl:
-			time.Sleep(900 * time.Millisecond)
 			entranceControl <- true
 		}
 	}
