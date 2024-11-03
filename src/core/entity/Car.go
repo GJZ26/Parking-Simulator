@@ -22,21 +22,26 @@ type Car struct {
 	queuePosition int
 }
 
-func NewCar(target geo.SlotInfo, road []geo.PointData, parking []geo.PointData, sprite *ebiten.Image) *Car {
+func NewCar(target geo.SlotInfo, road []geo.PointData, parking []geo.PointData, sprite *ebiten.Image, queuePosition int) *Car {
 	return &Car{
-		x:           int(road[0].X),
-		y:           int(road[0].Y),
-		angle:       -90,
-		sprite:      sprite,
-		parkingTime: 3 + rand.Intn(3),
-		targetSlot:  target,
-		parkingRoad: parking,
-		defaultRoad: road}
+		x:             int(road[0].X),
+		y:             int(road[0].Y),
+		angle:         -90,
+		sprite:        sprite,
+		parkingTime:   3 + rand.Intn(3),
+		targetSlot:    target,
+		parkingRoad:   parking,
+		defaultRoad:   road,
+		queuePosition: queuePosition,
+	}
 }
 
 func (c *Car) Update() bool {
 
-	if c.x > int(c.defaultRoad[1].X+70) {
+	if c.x >
+		int(c.defaultRoad[1].X+ // posición x de la ruta principal
+			90+ // Distancia desde la intersacción de la entrada
+			(70*float64(c.queuePosition))) { // Distancia entre auto en cola
 		c.x -= carSpeed
 	}
 

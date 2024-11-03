@@ -43,9 +43,11 @@ func main() {
 	renderChannel := make(chan resourcesType.RenderData, 1)
 	freeSlotChannel := make(chan []uint32, 1)
 
+	// GoRoutines
 	go entityManager.Run(renderChannel, slotChannel, freeSlotChannel)
 	go slotManager.Run(slotChannel, freeSlotChannel)
 	go renderEngine.UpdateCache(renderChannel)
 
+	// Render loop :D
 	renderEngine.Run()
 }

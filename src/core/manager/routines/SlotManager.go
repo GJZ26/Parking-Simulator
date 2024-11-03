@@ -52,7 +52,7 @@ func (s *SlotManager) Run(slotInfo chan geo.SlotInfo, freeSlotChannel chan []uin
 			slotInfo <- data
 		}
 
-		time.Sleep(1 * time.Second)
+		time.Sleep(1 * time.Second) // dar un poquito de tiempo para que no se amontonen :D
 	}
 }
 
