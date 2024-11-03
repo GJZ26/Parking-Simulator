@@ -2,8 +2,10 @@ package render
 
 import (
 	"Parking_Simulator/src/core/entity"
+	"Parking_Simulator/src/core/manager/types"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/lafriks/go-tiled"
 	"github.com/lafriks/go-tiled/render"
 	"image"
@@ -19,15 +21,12 @@ const (
 )
 
 type Engine struct {
-	background    *ebiten.Image
-	renderChannel chan []*entity.Car
-	cache         []*entity.Car
+	background *ebiten.Image
+	cache      types.RenderData
 }
 
-func NewRenderEngine(title string, icon *ebiten.Image, tileMap *tiled.Map, renderChannel chan []*entity.Car) *Engine {
-	renderEngine := &Engine{
-		renderChannel: renderChannel,
-	}
+func NewRenderEngine(title string, icon *ebiten.Image, tileMap *tiled.Map) *Engine {
+	renderEngine := &Engine{}
 	renderEngine.setWindow(title, icon)
 	renderEngine.loadMap(tileMap)
 	return renderEngine
@@ -49,21 +48,16 @@ func (r *Engine) loadMap(tileMap *tiled.Map) {
 
 func (r *Engine) Draw(screen *ebiten.Image) {
 	screen.DrawImage(r.background, &ebiten.DrawImageOptions{})
-	select {
-	case current := <-r.renderChannel:
-		// Render from channel
-		r.DrawCars(screen, current)
-		r.cache = current
-	default:
-		// Render from caché
-		r.DrawCars(screen, r.cache)
-	}
+	r.DrawCars(screen, r.cache)
 }
 
-func (r *Engine) DrawCars(screen *ebiten.Image, cars []*entity.Car) {
-	for _, car := range cars {
+func (r *Engine) DrawCars(screen *ebiten.Image, cars types.RenderData) {
+	for _, car := range cars.Cars {
 		r.DrawCar(screen, car)
 	}
+
+	text := fmt.Sprintf("Carros por estacionar: %d", cars.Counter)
+	ebitenutil.DebugPrintAt(screen, text, 10, 10)
 }
 
 func (r *Engine) DrawCar(screen *ebiten.Image, car *entity.Car) {
@@ -97,5 +91,17 @@ func (r *Engine) Run() {
 	fmt.Println("Running render loop")
 	if err := ebiten.RunGame(r); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func (r *Engine) UpdateCache(renderChannel chan types.RenderData) {
+	for {
+		select {
+		case current := <-renderChannel:
+			println("[Render Engine]: Rendering from Channel")
+			r.cache = current
+		default:
+			continue
+		}
 	}
 }

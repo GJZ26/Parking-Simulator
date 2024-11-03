@@ -1,11 +1,11 @@
 package main
 
 import (
-	"Parking_Simulator/src/core/entity"
 	"Parking_Simulator/src/core/manager"
 	"Parking_Simulator/src/core/manager/routines"
 	"Parking_Simulator/src/core/manager/types"
 	render2 "Parking_Simulator/src/core/render"
+	"fmt"
 )
 
 const (
@@ -21,6 +21,7 @@ const (
 )
 
 func main() {
+	fmt.Println("Starting", appName)
 	// Shared resources.
 	var resources = manager.NewResources(iconPath, mapPath, types.CarSpritePath{
 		Blue:   bluePath,
@@ -33,13 +34,17 @@ func main() {
 
 	// Starting Entity Manager
 	var entityManager = routines.NewEntityManager(resources.Points, resources.CarsSprites)
+	var slotManager = routines.NewSlotManager(resources.Points)
+	var renderEngine = render2.NewRenderEngine(appName, resources.Icon, resources.MapInfo)
 
 	// Channels
-	renderChannel := make(chan []*entity.Car)
+	slotChannel := make(chan types.SlotInfo, 1)
+	renderChannel := make(chan types.RenderData, 1)
+	freeSlotChannel := make(chan []uint32, 1)
 
-	go entityManager.Run(renderChannel)
+	go entityManager.Run(renderChannel, slotChannel, freeSlotChannel)
+	go slotManager.Run(slotChannel, freeSlotChannel)
+	go renderEngine.UpdateCache(renderChannel)
 
-	// Starting Render Engine (Ebiten)
-	var renderEngine = render2.NewRenderEngine(appName, resources.Icon, resources.MapInfo, renderChannel)
 	renderEngine.Run()
 }
